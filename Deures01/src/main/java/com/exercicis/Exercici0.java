@@ -74,8 +74,20 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarNom"
      */
     public static boolean validarNom(String nom) {
-        // TODO
-        return false;
+        nom = nom.trim().toLowerCase();
+
+        if (nom.isEmpty()) {
+            return false;
+        }
+
+        String caracteresAceptados = " abcdefghijklmnopqrstvwxyzàáèéìíòóùúäëïöüç";
+
+        for (char car : nom.toCharArray()) {
+            if (caracteresAceptados.indexOf(car) == -1) {
+                return false;
+            }
+        }
+        return true;
     }
     
     /**
@@ -89,8 +101,7 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarEdat"
      */
     public static boolean validarEdat(int edat) {
-        // TODO
-        return false;
+        return (edat >= 18 && edat <= 100);
     }
 
     /**
@@ -111,7 +122,17 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarFactors"
      */
     public static boolean validarFactors(String[] factors) {
-        // TODO
+        if (factors != null && factors.length == 2) {
+            String tipo = factors[0];
+            String riesgo = factors[1];
+
+            if ("autònom".equals(tipo) && "risc baix".equals(riesgo)) {
+                return false;
+            }
+
+            return ("autònom".equals(tipo) || "empresa".equals(tipo)) && 
+            ("risc alt".equals(riesgo) || "risc mitjà".equals(riesgo) || "risc baix".equals(riesgo)); 
+        }
         return false;
     }
 
@@ -131,8 +152,7 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarDescompte"
      */
     public static boolean validarDescompte(double descompte) {
-        // TODO
-        return false;
+        return (descompte >= 0 && descompte <= 20);
     }
 
     /**
@@ -156,7 +176,17 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarTipusOperacio"
      */
     public static boolean validarTipusOperacio(String tipus) {
-        // TODO
+        String[] tipusValids = {
+            "Declaració d'impostos", "Gestió laboral", "Assessoria fiscal",
+            "Constitució de societat", "Modificació d'escriptures",
+            "Testament", "Gestió d'herències", "Acta notarial",
+            "Contracte de compravenda", "Contracte de lloguer"
+        };
+        for (String tipusValid : tipusValids) {
+            if (tipusValid.equals(tipus)){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -183,8 +213,27 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarClients"
      */
     public static boolean validarClients(ArrayList<String> clientsLlista, ArrayList<String> clientsGlobals) {
-        // TODO
-        return false;
+        if (clientsLlista == null || clientsGlobals == null) {
+            return false;
+        } /*listas no null(existen) */
+        
+        HashMap<String, Integer> clientsCount = new HashMap<>(); /*se guarda cuenta cliente */
+
+        for (String client : clientsLlista) {
+            if (clientsCount.containsKey(client)) {
+                clientsCount.put(client, clientsCount.get(client) + 1);
+            } else {
+                clientsCount.put(client, 1);
+            }
+        } /* cuenta frecuencia cliente */
+
+        for (String client : clientsLlista) {
+            if (clientsCount.get(client) > 1 || !clientsGlobals.contains(client)) {
+                return false;
+            } /*evita duplicados (clientes unicos) */
+        }
+
+        return true;
     }
 
     /**
@@ -196,8 +245,16 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testIsAllDigits"
      */
     public static boolean isAllDigits(String str) {
-        // TODO
-        return false;
+        if (str.length() == 0) {
+            return false;
+        }
+
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -222,8 +279,46 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarData"
      */
     public static boolean validarData(String data) {
-        // TODO
-        return false;
+        if (data == null || data.length() != 10) {
+            return false;
+        }
+
+        if (data.charAt(4) != '-' || data.charAt(7) != '-') {
+            return false;
+        }
+
+        String anyStr = data.substring(0, 4);
+        String mesStr = data.substring(5, 7);
+        String diaStr = data.substring(8, 10);
+        
+        if (!isAllDigits(anyStr) || !isAllDigits(mesStr) || !isAllDigits(diaStr)) {
+            return false;
+        }
+
+        /*conver entero */
+        int any = Integer.parseInt(anyStr);
+        int mes = Integer.parseInt(mesStr);
+        int dia = Integer.parseInt(diaStr);
+
+        if (any < 1000 || any > 9999) {
+            return false;
+        }
+        if (mes < 1 || mes > 12) {
+            return false;
+        }
+        if (dia < 1 || dia > 31) {
+            return false;
+        }
+
+        if (mes == 2 && dia > 29) {
+            return false;
+        } /*febrero */
+
+        if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -243,8 +338,8 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarPreu"
      */
     public static boolean validarPreu(double preu) {
-        // TODO
-        return false;
+        return (preu > 100);
+        
     }
 
     /**
@@ -257,8 +352,15 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testGeneraClauClient"
      */
     public static String generaClauClient() {
-        // TODO
-        return "";
+        Random random = new Random();
+        String clau;
+
+        do {
+            int numeroAleatori = 100 + random.nextInt(900);
+            clau = "client_" + numeroAleatori;
+        } while (clients.containsKey(clau));
+       
+        return clau;
     }
 
     /**
