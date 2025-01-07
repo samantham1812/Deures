@@ -74,8 +74,20 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarNom"
      */
     public static boolean validarNom(String nom) {
-        // TODO
-        return false;
+        nom = nom.trim().toLowerCase();
+
+        if (nom.isEmpty()) {
+            return false;
+        }
+
+        String caracteresAceptados = " abcdefghijklmnopqrstvwxyzàáèéìíòóùúäëïöüç";
+
+        for (char car : nom.toCharArray()) {
+            if (caracteresAceptados.indexOf(car) == -1) {
+                return false;
+            }
+        }
+        return true;
     }
     
     /**
@@ -89,8 +101,7 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarEdat"
      */
     public static boolean validarEdat(int edat) {
-        // TODO
-        return false;
+        return (edat >= 18 && edat <= 100);
     }
 
     /**
@@ -111,7 +122,17 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarFactors"
      */
     public static boolean validarFactors(String[] factors) {
-        // TODO
+        if (factors != null && factors.length == 2) {
+            String tipo = factors[0];
+            String riesgo = factors[1];
+
+            if ("autònom".equals(tipo) && "risc baix".equals(riesgo)) {
+                return false;
+            }
+
+            return ("autònom".equals(tipo) || "empresa".equals(tipo)) && 
+            ("risc alt".equals(riesgo) || "risc mitjà".equals(riesgo) || "risc baix".equals(riesgo)); 
+        }
         return false;
     }
 
@@ -131,8 +152,7 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarDescompte"
      */
     public static boolean validarDescompte(double descompte) {
-        // TODO
-        return false;
+        return (descompte >= 0 && descompte <= 20);
     }
 
     /**
@@ -156,7 +176,17 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarTipusOperacio"
      */
     public static boolean validarTipusOperacio(String tipus) {
-        // TODO
+        String[] tipusValids = {
+            "Declaració d'impostos", "Gestió laboral", "Assessoria fiscal",
+            "Constitució de societat", "Modificació d'escriptures",
+            "Testament", "Gestió d'herències", "Acta notarial",
+            "Contracte de compravenda", "Contracte de lloguer"
+        };
+        for (String tipusValid : tipusValids) {
+            if (tipusValid.equals(tipus)){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -183,8 +213,27 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarClients"
      */
     public static boolean validarClients(ArrayList<String> clientsLlista, ArrayList<String> clientsGlobals) {
-        // TODO
-        return false;
+        if (clientsLlista == null || clientsGlobals == null) {
+            return false;
+        } /*listas no null(existen) */
+        
+        HashMap<String, Integer> clientsCount = new HashMap<>(); /*se guarda cuenta cliente */
+
+        for (String client : clientsLlista) {
+            if (clientsCount.containsKey(client)) {
+                clientsCount.put(client, clientsCount.get(client) + 1);
+            } else {
+                clientsCount.put(client, 1);
+            }
+        } /* cuenta frecuencia cliente */
+
+        for (String client : clientsLlista) {
+            if (clientsCount.get(client) > 1 || !clientsGlobals.contains(client)) {
+                return false;
+            } /*evita duplicados (clientes unicos) */
+        }
+
+        return true;
     }
 
     /**
@@ -196,8 +245,16 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testIsAllDigits"
      */
     public static boolean isAllDigits(String str) {
-        // TODO
-        return false;
+        if (str.length() == 0) {
+            return false;
+        }
+
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -222,8 +279,46 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarData"
      */
     public static boolean validarData(String data) {
-        // TODO
-        return false;
+        if (data == null || data.length() != 10) {
+            return false;
+        }
+
+        if (data.charAt(4) != '-' || data.charAt(7) != '-') {
+            return false;
+        }
+
+        String anyStr = data.substring(0, 4);
+        String mesStr = data.substring(5, 7);
+        String diaStr = data.substring(8, 10);
+        
+        if (!isAllDigits(anyStr) || !isAllDigits(mesStr) || !isAllDigits(diaStr)) {
+            return false;
+        }
+
+        /*conver entero */
+        int any = Integer.parseInt(anyStr);
+        int mes = Integer.parseInt(mesStr);
+        int dia = Integer.parseInt(diaStr);
+
+        if (any < 1000 || any > 9999) {
+            return false;
+        }
+        if (mes < 1 || mes > 12) {
+            return false;
+        }
+        if (dia < 1 || dia > 31) {
+            return false;
+        }
+
+        if (mes == 2 && dia > 29) {
+            return false;
+        } /*febrero */
+
+        if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -243,8 +338,8 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testValidarPreu"
      */
     public static boolean validarPreu(double preu) {
-        // TODO
-        return false;
+        return (preu > 100);
+        
     }
 
     /**
@@ -257,8 +352,15 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testGeneraClauClient"
      */
     public static String generaClauClient() {
-        // TODO
-        return "";
+        Random random = new Random();
+        String clau;
+
+        do {
+            int numeroAleatori = 100 + random.nextInt(900);
+            clau = "client_" + numeroAleatori;
+        } while (clients.containsKey(clau));
+       
+        return clau;
     }
 
     /**
@@ -280,8 +382,6 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testAfegirClient"
      */
     public static String afegirClient(String nom, int edat, ArrayList<String> factors, double descompte) {
-        // TODO
-        return "";
     }
 
     /**
@@ -305,8 +405,6 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testModificarClient"
      */
     public static String modificarClient(String clauClient, String camp, Object nouValor) {
-        // TODO
-        return "";
     }
 
     /**
@@ -325,8 +423,12 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testEsborrarClient"
      */
     public static String esborrarClient(String clauClient) {
-        // TODO
-        return "";
+        if (!clients.containsKey(clauClient)) {
+            return "Client amb clau " + clauClient + " no existeix.";
+        }
+
+        clients.remove(clauClient);
+        return "OK";
     }
 
     /**
@@ -345,8 +447,32 @@ public class Exercici0 {
             ArrayList<String> claus,
             HashMap<String, Object> condicions) {
         
-        // TODO
-        return null;
+        ArrayList<HashMap<String, HashMap<String, Object>>> resultat = new ArrayList<>();
+
+        for (String clau: clients.keySet()) {
+            if (!claus.contains(clau)) {
+                continue;
+            }
+
+            HashMap<String, Object> dades = clients.get(clau);
+            boolean coincideix = true;
+
+            for (String key : condicions.keySet()) {
+                Object valorEsperat = condicions.get(key);
+
+                    if (!dades.containsKey(key) || !dades.get(key).equals(valorEsperat)) {
+                        coincideix = false;
+                        break;
+                    }
+            }
+
+            if (coincideix) {
+                HashMap<String, HashMap<String, Object>> clientValid = new HashMap<>();
+                clientValid.put(clau, dades);
+                resultat.add(clientValid);
+            }
+        }
+        return resultat;
     }
 
     /**
@@ -359,8 +485,23 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testGeneraClauOperacio"
      */
     public static String generaClauOperacio() {
-        // TODO
-        return "";
+        Random random = new Random();
+        String clau;
+
+        boolean existeix;
+        do {
+            int numeroAleatori = 100 + random.nextInt(900);
+            clau = "operacio_" + numeroAleatori;
+
+            existeix = false;
+            for (HashMap<String, Object> operacio : operacions) {
+                if (clau.equals(operacio.get("id"))) {
+                    existeix = true;
+                    break;
+                }
+            }
+        } while (existeix);
+        return clau;
     }
 
     /**
@@ -391,8 +532,18 @@ public class Exercici0 {
             String observacions,
             double preu) {
 
-        // TODO
-        return "";
+        String nouId = generaClauOperacio();
+
+        HashMap<String, Object> operacio = new HashMap<>();
+        operacio.put("id", nouId);
+        operacio.put("tipus", tipus);
+        operacio.put("clients", clientsImplicats);
+        operacio.put("data", data);
+        operacio.put("observacions", observacions);
+        operacio.put("preu", preu);
+
+        operacions.add(operacio);
+        return nouId;
     }
 
     /**
@@ -407,8 +558,17 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testModificarOperacio"
      */
     public static String modificarOperacio(String idOperacio, String camp, Object nouValor) {
-        // TODO
-        return "";
+        for (HashMap<String, Object> operacio: operacions) {
+            if (operacio.get("id").equals(idOperacio)) {
+                if (operacio.containsKey(camp)) {
+                    operacio.put(camp, nouValor);
+                    return "OK";
+                } else {
+                    return "El camp " + camp + " no existeix en l'operacio.";
+                }
+            }
+        }
+        return "Operacio amb id " + idOperacio + " no existeix.";
     }
 
     /**
@@ -420,8 +580,14 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testEsborrarOperacio"
      */
     public static String esborrarOperacio(String idOperacio) {
-        // TODO
-        return "";
+        for (int i = 0; i < operacions.size(); i++) {
+            HashMap<String, Object> operacio = operacions.get(i);
+            if (operacio.get("id").equals(idOperacio)) {
+                operacions.remove(i);
+                return "OK";
+            }
+        }
+        return "Operaci amb id " + idOperacio + " no existeix.";
     }
 
     /**
@@ -439,8 +605,29 @@ public class Exercici0 {
             ArrayList<String> ids,
             HashMap<String, Object> condicions) {
 
-        // TODO
-        return null;
+        ArrayList<HashMap<String, Object>> resultat = new ArrayList<>();
+
+        for (HashMap<String, Object> operacio : operacions) {
+            if (ids != null && !ids.isEmpty() && !ids.contains(operacio.get("id"))) {
+                continue;
+            } /* verifica ids */
+
+            boolean coincideix = true;
+
+            if (condicions != null && !condicions.isEmpty()) {
+                for (String key : condicions.keySet()) {
+                    if (!operacio.containsKey(key) || !operacio.get(key).equals(condicions.get(key))) {
+                        coincideix = false;
+                        break;
+                    } /* si las condiciones se cumplen */
+                }
+            }
+
+            if (coincideix){
+                resultat.add(operacio);
+            }
+        }
+        return resultat;
     }
 
     /**
@@ -452,8 +639,15 @@ public class Exercici0 {
      * @test ./runTest.sh "com.exercicis.TestExercici0#testLlistarOperacionsClient"
      */
     public static ArrayList<HashMap<String, Object>> llistarOperacionsClient(String clauClient) {
-        // TODO
-        return null;
+        ArrayList<HashMap<String, Object>> resultat = new ArrayList<>();
+
+        for (HashMap<String, Object> operacio : operacions){
+            ArrayList<String> clients = (ArrayList<String>) operacio.get("clients");
+            if (clients != null && clients.contains(clauClient)) {
+                resultat.add(operacio);
+            }
+        }
+        return resultat;
     }
 
     /**
@@ -580,8 +774,19 @@ Impostos:  21% (14.41)                     Total: 83.04
      * @test ./runTest.sh "com.exercicis.TestExercici0#testLlistarClientsMenu"
      */
     public static ArrayList<String> getLlistarClientsMenu() {
-        // TODO
-        return null;
+        ArrayList<String> lineas = new ArrayList<>();
+        lineas.add("=== Llistar Clients ===");
+
+        if (clients.isEmpty()) {
+            lineas.add("No hi ha clients per mostrar.");
+            return lineas;
+        }
+
+        for (String clau : clients.keySet()) {
+            lineas.add(clau + ": " + clients.get(clau).toString());
+        }
+
+        return lineas;
     }
 
     /**
@@ -592,7 +797,9 @@ Impostos:  21% (14.41)                     Total: 83.04
      * @test ./runTest.sh "com.exercicis.TestExercici0#testDibuixarLlista"
      */
     public static void dibuixarLlista(ArrayList<String> llista) {
-        // TODO
+        for (String linea : llista) {
+            System.out.println(linea);
+        }
     }
     
 
